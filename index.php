@@ -1,3 +1,18 @@
+<?php
+if (isset($_POST["url"])) { 
+    $url = $_POST["url"];
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        if (strpos($url,'http') === false){
+            $url = "http://$url";
+        }
+    }
+
+} else {
+    $url = "";
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +22,7 @@
 
     <form action="" method="post">
         <label for="url">Url:</label>
-        <input type="text" name="url" id="url" />
+        <input type="text" name="url" id="url" value="<?php echo $url; ?>" />
         <button type="submit">Count shares</button>
     </form>
 
