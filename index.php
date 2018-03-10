@@ -60,6 +60,26 @@ if (isset($_POST["url"])) {
     $result = jsonp_decode(file_get_contents($pinterest_url));
     $pinterest_count = $result->count;
 
+
+    // Saving data to database
+    $db = new PDO($dsn, $user, $password, $options);
+
+    $count_sql = "SELECT count(*) FROM results WHERE url = ?";
+    $stmt = $db->prepare($count_sql);
+    $stmt->execute([$url]);
+    $existsUrl = $stmt->fetchColumn();
+
+    if ($existsUrl==0) {
+        $insert_sql = "INSERT INTO results(url, twitter_count, facebook_count, pinterest_count) VALUES (?, ?, ?, ?)";
+        $stmt = $db->prepare($insert_sql);
+        $stmt->execute([$url, $twitter_count, $facebook_count, $pinterest_count]);
+    
+    } else {
+        $insert_sql = "UPDATE results SET twitter_count = ?, facebook_count = ?, pinterest_count = ? WHERE url = ?";
+        $stmt = $db->prepare($insert_sql);
+        $stmt->execute([$twitter_count, $facebook_count, $pinterest_count, $url]);
+    }
+
 }
 ?>
 
