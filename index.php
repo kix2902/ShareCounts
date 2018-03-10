@@ -27,13 +27,41 @@ if (isset($_POST["url"])) {
     </form>
 
 <?php
-include 'config.php';
+if (isset($_POST["url"])) {
+    
+    require_once("config.php");
+    require_once("utils.php");
 
-if (isset($_POST['url'])) {
-   $connection = new PDO($dsn, $user, $password, $options); 
+
+    // Twitter counter
+    require_once("TwitterAPIExchange.php");
+
+    $twitter_url = "https://api.twitter.com/1.1/search/tweets.json";
+    $requestMethod = 'GET';
+    $getfield = "?q=$url&result_type=recent&count=100&include_entities=false&include_user_entities=false";
+
+    $twitter = new TwitterAPIExchange($twitter_settings);
+    $result = json_decode(
+        $twitter->setGetfield($getfield)
+        ->buildOauth($twitter_url, $requestMethod)
+        ->performRequest()
+    );
+
+    $twitter_count = $result->statuses;
+    
+
+    // Facebook counter
+    $facebook_url = "http://graph.facebook.com/?id=$url";
+    $result = json_decode(file_get_contents($facebook_url));
+    $facebook_count = $result->share->share_count;
+    
+
+    // Pinterest counter
+    $pinterest_url = "https://api.pinterest.com/v1/urls/count.json?callback=jsonp&url=$url";
+    $result = jsonp_decode(file_get_contents($pinterest_url));
+    $pinterest_count = $result->count;
 
 }
-
 ?>
 
 
