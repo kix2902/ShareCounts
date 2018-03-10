@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+    h3 {
+        margin-bottom: 0.3em;
+    }
+    .result {
+        margin-left: 1em;
+    }
+    </style>
     <title>Share counter</title>
 </head>
 <body>
@@ -73,6 +81,24 @@ if (!empty($_POST["url"])) {
         $stmt->execute([$twitter_count, $facebook_count, $pinterest_count, $url]);
     }
 
+
+    // Loading data from database
+    // Will reuse PDO object
+    $select_sql = "SELECT * FROM results WHERE url = ?";
+    $stmt = $db->prepare($select_sql);
+    $stmt->execute([$url]);
+
+    $row = $stmt->fetch(); // We'll only have one result
+?>
+    <div class="result">
+        <h3><?php echo $row["url"]; ?></h3>
+        <div><strong>Twitter:</strong> <span><?php echo $row["twitter_count"]; ?></span></div>
+        <div><strong>Facebook:</strong> <span><?php echo $row["facebook_count"]; ?></span></div>
+        <div><strong>Pinterest:</strong> <span><?php echo $row["pinterest_count"]; ?></span></div>
+        <div><strong>LinkedIn:</strong> <span><abbr title="LinkedIn has closed its counting endpoint">N/A</abbr></span></div>
+    </div>
+
+<?php
 }
 ?>
 </body>
