@@ -1,5 +1,5 @@
 <?php
-if (isset($_POST["url"])) { 
+if (!empty($_POST["url"])) { 
     $url = $_POST["url"];
 
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
@@ -7,9 +7,6 @@ if (isset($_POST["url"])) {
             $url = "http://$url";
         }
     }
-
-} else {
-    $url = "";
 }
 ?>
 
@@ -27,7 +24,7 @@ if (isset($_POST["url"])) {
     </form>
 
 <?php
-if (isset($_POST["url"])) {
+if (isset($url)) {
     
     require_once("config.php");
     require_once("utils.php");
