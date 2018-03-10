@@ -46,8 +46,7 @@ if (isset($_POST["url"])) {
         ->buildOauth($twitter_url, $requestMethod)
         ->performRequest()
     );
-
-    $twitter_count = $result->statuses;
+    $twitter_count = sizeof($result->statuses);
     
 
     // Facebook counter
