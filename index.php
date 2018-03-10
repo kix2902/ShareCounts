@@ -9,7 +9,6 @@ if (!empty($_POST["url"])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,7 +78,5 @@ if (isset($url)) {
 
 }
 ?>
-
-
 </body>
 </html>
